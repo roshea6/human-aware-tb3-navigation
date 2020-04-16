@@ -9,7 +9,7 @@
     <arg name="yaw" default="-1.57"/>
 	<arg name="js" default="js0"/>
 
-	<arg name="map_file" default="$(find cpe631_project)/map/alt_map.yaml"/>
+	<arg name="map_file" default="$(find human-aware-tb3-navigation)/map/alt_map.yaml"/>
 
 	<!-- Get the description of the turtlebot 3 from the urdf file -->
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
