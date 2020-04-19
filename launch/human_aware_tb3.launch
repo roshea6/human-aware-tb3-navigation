@@ -14,11 +14,6 @@
 	<!-- Get the description of the turtlebot 3 from the urdf file -->
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
-	<!-- Run the map server -->
-  	<!-- <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
-		<param name="frame_id" value="map"/>
-	</node> -->
-
 	<include file="$(find pedsim_simulator)/launch/Altorfer_f1.launch">
 		<arg name="rviz" value="false"/>
 	</include>
@@ -27,20 +22,10 @@
 	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3_$(arg model) -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw) -param robot_description" />
 	
 
-	<!-- Launch mapping node -->
+	<!-- Launch  move_base, amcl, map server, and turtlebot3 bringup -->
 	<include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
 		<arg name="map_file" value="$(arg map_file)"/>
 	</include>
-
-	<!-- AMCL -->
-	<!-- <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
-		<arg name="initial_pose_x" value="$(arg x)"/>
-		<arg name="initial_pose_y" value="$(arg y)"/>
-		<arg name="initial_pose_a" value="$(arg yaw)"/>
-	</include>
-
-	<include file="$(find turtlebot3_navigation)/launch/move_base.launch">
-	</include> -->
 
 	<!--- Run gmapping -->
     <!-- <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">

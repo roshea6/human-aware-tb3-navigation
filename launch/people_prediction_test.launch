@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<launch>
+
+	<arg name="model" default="burger"/>
+
+	<arg name="x" default="0.5"/>
+    <arg name="y" default="-3.0"/>
+    <arg name="z" default="0.0"/>
+    <!-- <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/> -->
+    <arg name="yaw" default="-1.57"/>
+	<arg name="js" default="js0"/>
+
+	<arg name="map_file" default="$(find human-aware-tb3-navigation)/map/test_map.yaml"/>
+    <!-- <arg name="map_file" default="$(find human_aware_nav_launch)/maps/playground_new.yaml"/> -->
+
+	<!-- Get the description of the turtlebot 3 from the urdf file -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+    <!-- Launches pedsim simulation -->
+	<include file="$(find pedsim_simulator)/launch/Altorfer_f1.launch">
+		<arg name="rviz" value="false"/>
+	</include>
+
+    <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find human_aware_nav_launch)/launch/sim/playground.world"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include> -->
+
+	<!-- Spawn a turtlebot 3 in the gazebo world -->
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3_$(arg model) -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw) -param robot_description" />
+
+    <!-- Turtlebot3 bringup -->
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+        <arg name="model" value="$(arg model)" />
+    </include>
+
+    <!-- Run the map server -->
+  	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
+	
+
+    <!-- AMCL -->
+    <include file="$(find turtlebot3_navigation)/launch/amcl.launch" >
+        <arg name="initial_pose_x" value="$(arg x)" />
+        <arg name="initial_pose_y" value="$(arg y)" />
+        <arg name="initial_pose_a" value="$(arg yaw)" />
+    </include>
+
+    <!--- Run Move Base -->
+    <include file="$(find human_aware_nav_launch)/launch/move_base.launch" >
+        <arg name="model" value="$(arg model)" />
+    </include>
+
+    <!--- Run constant velocity prediction node -->
+    <node name="constant_velocity_prediction" pkg="people_prediction" type="constant_velocity_prediction" />
+
+    <!--- Run rviz --> 
+    <include file="$(find human_aware_nav_launch)/launch/rviz.launch" />
+
+
+	<!-- joy node -->
+ 	<!-- <node respawn="true" pkg="joy" type="joy_node" name="joy" >
+	    <param name="dev" type="string" value="/dev/input/$(arg js)" />
+	    <param name="deadzone" value="0.12" />
+		<param name="autorepeat_rate" value="10"/>
+  	</node>
+
+  	<node pkg="human-aware-tb3-navigation" type="teleop_node.py" name="teleop_node"/> -->
+
+
+
+</launch>

@@ -14,7 +14,7 @@ from sensor_msgs.msg import Joy
 
 # Callback function to convert joy data to velocity commands
 def vel_callback(msg):
-	pub = rospy.Publisher('/husky_velocity_controller/cmd_vel', Twist, queue_size=1)
+	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 	vel_msg = Twist()
 
 	vel_msg.linear.x = msg.axes[1]
