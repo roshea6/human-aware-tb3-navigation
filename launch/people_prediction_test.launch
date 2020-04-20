@@ -70,7 +70,7 @@
 		<param name="autorepeat_rate" value="10"/>
   	</node>
 
-  	<node pkg="human-aware-tb3-navigation" type="teleop_node.py" name="teleop_node"/> -->
+  	<node pkg="human-aware-tb3-navigation" type="deja_vu.py" name="teleop_node"/> -->
 
 
 

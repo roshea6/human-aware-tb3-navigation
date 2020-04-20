@@ -18,11 +18,11 @@ def vel_callback(msg):
 	vel_msg = Twist()
 
 	if msg.buttons[0]:
-		vel_msg.linear.x = .5
+		vel_msg.linear.x = 1
 
 	elif msg.buttons[1] == 1:
-		vel_msg.linear.x = 1
-		vel_msg.angular.z = 1.5
+		vel_msg.linear.x = 2
+		vel_msg.angular.z = 2.5
 	
 	pub.publish(vel_msg)
 
