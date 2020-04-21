@@ -9,7 +9,7 @@
     <!-- <arg name="x" default="0.0"/>
     <arg name="y" default="0.0"/>
     <arg name="z" default="0.0"/> -->
-    <arg name="yaw" default="-1.57"/>
+    <arg name="yaw" default="0.0"/>
 	<arg name="js" default="js0"/>
 
 	<arg name="map_file" default="$(find human-aware-tb3-navigation)/map/test_map.yaml"/>
