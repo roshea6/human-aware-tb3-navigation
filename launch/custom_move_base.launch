@@ -1,0 +1,20 @@
+<launch>
+
+  <arg name="model" default="test" doc="model type [burger, waffle, waffle_pi]"/>
+
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">   
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />  
+    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <!-- Changed these values from .5 to .3 to make the robot more likely to go near the wall than a person -->
+    <param name="local_costmap/inflation_layer/inflation_radius" value="0.25" />
+    <param name="global_costmap/inflation_layer/inflation_radius" value="0.25" />
+    <param name="local_costmap/inflation_radius" value="0.25" />
+    <param name="global_costmap/inflation_radius" value="0.25" />
+    <rosparam file="$(find human-aware-tb3-navigation)/config/global_planner_params.yaml" command="load" />
+    <param name="TBPlanner/dynamic_layers_plugin" value="dynamic_social_costmap::SocialLayers" />
+    <rosparam file="$(find timed_path_follower)/config/local_planner_params.yaml" command="load" />
+  </node>
+
+</launch>
