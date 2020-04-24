@@ -82,8 +82,8 @@ def modelCallback(states_msg):
         # marker_pub.publish(people_marker)
 
         # Add the person's velocity
-        one_person.velocity.x = 0#states_msg.twist[idx].linear.x
-        one_person.velocity.y = 0 #states_msg.twist[idx].linear.y
+        one_person.velocity.x = states_msg.twist[idx].linear.x
+        one_person.velocity.y = states_msg.twist[idx].linear.y
 
         # ! Need to append a deep copy of the person object or or else each one will get overwritten
         # by the last person object appeneded to the list

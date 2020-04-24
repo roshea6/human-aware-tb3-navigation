@@ -12,6 +12,8 @@
     <arg name="yaw" default="0.0"/>
 	<arg name="js" default="js0"/>
 
+    <arg name="clear" default="false"/>
+
 	<arg name="map_file" default="$(find human-aware-tb3-navigation)/map/test_map.yaml"/>
     <!-- <arg name="map_file" default="$(find human_aware_nav_launch)/maps/playground_new.yaml"/> -->
 
@@ -57,21 +59,23 @@
     </include>
 
     <!--- Run constant velocity prediction node -->
-    <node name="constant_velocity_prediction" pkg="people_prediction" type="constant_velocity_prediction" />
+    <node name="constant_velocity_prediction" pkg="people_prediction" type="constant_velocity_prediction" output="screen"/>
 
     <!--- Run rviz --> 
     <include file="$(find human_aware_nav_launch)/launch/rviz.launch" />
 
 
-	<!-- joy node -->
- 	<!-- <node respawn="true" pkg="joy" type="joy_node" name="joy" >
-	    <param name="dev" type="string" value="/dev/input/$(arg js)" />
-	    <param name="deadzone" value="0.12" />
-		<param name="autorepeat_rate" value="10"/>
-  	</node>
+    <!-- Launch the people location publisher -->
+    <node name="gazebo_people_pub" pkg="human-aware-tb3-navigation" type="people_location_pub.py"/>
 
-  	<node pkg="human-aware-tb3-navigation" type="deja_vu.py" name="teleop_node"/> -->
+    <!-- Launch move base goal update -->
+    <node name="goal_refresher" pkg="human-aware-tb3-navigation" type="move_base_goal_updater.py"/>
 
+    <!-- Launch one hz publisher -->
+    <node name="one_hz" pkg="human-aware-tb3-navigation" type="1hz_pub.py"/>
 
+    <!-- <group if="$(arg clear)">
+        <node name="costmap_clearer" pkg="human-aware-tb3-navigation" type="clear_costmap.py"/>
+    </group> -->
 
 </launch>
